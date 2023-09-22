@@ -1,0 +1,38 @@
+server:
+    port: 8080
+
+spring:
+    thymeleaf:
+        cache: false
+
+    datasource:
+        url: jdbc:mysql://homestead.test/lmfds_blog?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+        username: homestead
+        password: secret
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jpa:
+        # open-in-view: false # 영속성 컨텍스트 유지 여부 (default: true)
+        hibernate:
+            ddl-auto: update
+            # naming:
+                # physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                "[format_sql]": true
+                "[show_sql]": true
+
+logging:
+    config: classpath:log4j2/log4j2.xml
+    level:
+        org:
+            hibernate:
+                SQL: DEBUG
+
+cafe24:
+    APP_NAME: app-skeleton
+    APP_URI: https://localhost
+    CLIENT_ID: CLIENT_ID
+    CLIENT_SECRET: CLIENT_SECRET
+    SERVICE_KEY: SERVICE_KEY
+    APP_SCOPE: APP_SCOPE
