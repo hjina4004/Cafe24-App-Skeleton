@@ -1,13 +1,16 @@
 package com.lmfriends.cafe24app.controller.Api;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lmfriends.cafe24app.dto.Cafe24ApiDto;
 import com.lmfriends.cafe24app.service.ApiResponse;
 import com.lmfriends.cafe24app.service.Cafe24Service;
 
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@CrossOrigin
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api")
@@ -46,5 +50,28 @@ public class Cafe24ApiController {
       @PathVariable(value = "shopNo") Integer shopNo,
       @PathVariable(value = "memberId") String memberId) {
     return cafe24Service.customer(mallId, shopNo, memberId);
+  }
+
+  @GetMapping("orders/{mallId}/{shopNo}")
+  public ApiResponse<JSONObject> orders(
+      @PathVariable(value = "mallId") String mallId,
+      @PathVariable(value = "shopNo") Integer shopNo,
+      Cafe24ApiDto dto) {
+    log.info("Cafe24ApiController::orders {} {} {}", mallId, shopNo, dto);
+    if (dto.getEnd_date() == null)
+      dto.setEnd_date(LocalDate.now());
+    if (dto.getStart_date() == null)
+      dto.setStart_date(LocalDate.now().withDayOfMonth(1));
+    return cafe24Service.orders(mallId, shopNo, dto);
+  }
+
+  @GetMapping("orders/{mallId}/{shopNo}/{orderId}")
+  public ApiResponse<JSONObject> order(
+      @PathVariable(value = "mallId") String mallId,
+      @PathVariable(value = "shopNo") Integer shopNo,
+      @PathVariable(value = "orderId") String orderId,
+      Cafe24ApiDto dto) {
+    log.info("Cafe24ApiController::order {} {} {} {}", mallId, shopNo, dto);
+    return cafe24Service.order(mallId, shopNo, orderId, dto);
   }
 }

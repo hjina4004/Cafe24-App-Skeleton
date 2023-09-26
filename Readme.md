@@ -19,12 +19,26 @@ config/application.yml
 
 
 ## Cafe24 REST api
+요청헤더에 X-Api-Authority 설정 필요
+
 * refresh_token를 사용하여 Access Token을 재발급
   ```
-  refresh-token/{mallId}/{shopNo}
+  /api/refresh-token/{mallId}/{shopNo}
   ```
 
-* 쇼핑몰 회원 검색
+* 쇼핑몰 회원 조회
   ```
-  customers/{mallId}/{shopNo}/{memberId}
+  /api/customers/{mallId}/{shopNo}/{memberId}
+  ```
+
+* 쇼핑몰 주문 목록
+  ```
+  /api/orders/{mallId}/{shopNo}?start_date=2021-06-01&end_date=2021-06-30&embed=items,receivers,buyer,return,cancellation,exchange
+  start_date default: 요청일 해당월 첫째일
+  end_date default: 요청일
+  ```
+
+* 쇼핑몰 주문 조회
+  ```
+  /api/orders/{mallId}/{shopNo}/{orderId}?embed=items,receivers,buyer,return,cancellation,exchange
   ```

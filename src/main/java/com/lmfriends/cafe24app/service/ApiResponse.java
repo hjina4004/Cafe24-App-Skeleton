@@ -9,25 +9,25 @@ import lombok.Data;
 @AllArgsConstructor
 public class ApiResponse<T> {
 
-  private int statusCode;
-  private String responseMessage;
+  private int code;
+  private String message;
   private T data;
 
-  public ApiResponse(final int statusCode, final String responseMessage) {
-    this.statusCode = statusCode;
-    this.responseMessage = responseMessage;
+  public ApiResponse(final int code, final String message) {
+    this.code = code;
+    this.message = message;
     this.data = null;
   }
 
-  public static <T> ApiResponse<T> res(final int statusCode, final String responseMessage) {
-    return res(statusCode, responseMessage, null);
+  public static <T> ApiResponse<T> res(final int code, final String message) {
+    return res(code, message, null);
   }
 
-  public static <T> ApiResponse<T> res(final int statusCode, final String responseMessage, final T t) {
+  public static <T> ApiResponse<T> res(final int code, final String message, final T t) {
     return ApiResponse.<T>builder()
         .data(t)
-        .statusCode(statusCode)
-        .responseMessage(responseMessage)
+        .code(code)
+        .message(message)
         .build();
   }
 }

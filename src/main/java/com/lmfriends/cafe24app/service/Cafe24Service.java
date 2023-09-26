@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.lmfriends.cafe24app.config.Cafe24Config;
+import com.lmfriends.cafe24app.dto.Cafe24ApiDto;
 import com.lmfriends.cafe24app.dto.Cafe24AppDto;
 import com.lmfriends.cafe24app.model.Cafe24Token;
 import com.lmfriends.cafe24app.repository.Cafe24TokenRepository;
@@ -47,7 +48,7 @@ public class Cafe24Service {
         .build();
 
     ApiResponse<JSONObject> res = requestWithAuthorization(cafe24AppDto.getMall_id(), formBody);
-    if (res.getStatusCode() == 200)
+    if (res.getCode() == 200)
       saveToken(res.getData());
     else
       return "fail";
@@ -78,6 +79,32 @@ public class Cafe24Service {
     return requestWithAaccessToken("GET", mallId, shopNo, uriComponents.toString());
   }
 
+  public ApiResponse<JSONObject> orders(String mallId, Integer shopNo, Cafe24ApiDto dto) {
+    UriComponents uriComponents = UriComponentsBuilder.newInstance()
+        .scheme("https")
+        .host(mallId + ".cafe24api.com")
+        .path("/api/v2/admin/orders")
+        .queryParam("shop_no", shopNo)
+        .queryParam("start_date", dto.getStart_date())
+        .queryParam("end_date", dto.getEnd_date())
+        .queryParam("embed", dto.getEmbed())
+        .build();
+
+    return requestWithAaccessToken("GET", mallId, shopNo, uriComponents.toString());
+  }
+
+  public ApiResponse<JSONObject> order(String mallId, Integer shopNo, String orderId, Cafe24ApiDto dto) {
+    UriComponents uriComponents = UriComponentsBuilder.newInstance()
+        .scheme("https")
+        .host(mallId + ".cafe24api.com")
+        .path("/api/v2/admin/orders/" + orderId)
+        .queryParam("shop_no", shopNo)
+        .queryParam("embed", dto.getEmbed())
+        .build();
+
+    return requestWithAaccessToken("GET", mallId, shopNo, uriComponents.toString());
+  }
+
   protected String getAccessTokenByRefreshToken(String mallId, Integer shopNo, String refreshToken) {
     RequestBody formBody = new FormBody.Builder()
         .add("grant_type", "refresh_token")
@@ -85,7 +112,7 @@ public class Cafe24Service {
         .build();
 
     ApiResponse<JSONObject> res = requestWithAuthorization(mallId, formBody);
-    if (res.getStatusCode() == 200)
+    if (res.getCode() == 200)
       return saveToken(res.getData());
     else
       return "";
