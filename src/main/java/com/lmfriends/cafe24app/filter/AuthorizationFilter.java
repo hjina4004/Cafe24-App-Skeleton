@@ -33,7 +33,7 @@ public class AuthorizationFilter implements Filter {
     String strOrigin = httpServletRequest.getHeader("Origin");
     String strURI = httpServletRequest.getRequestURI();
     String strApiAuthority = httpServletRequest.getHeader("X-Api-Authority");
-    log.info("AuthorizationFilter.doFilter [{}]{} {} X-Api-Authority={}", strMethod, strURI, strOrigin, strApiAuthority);
+    log.info("AuthorizationFilter::doFilter [{}]{} {} X-Api-Authority={}", strMethod, strURI, strOrigin, strApiAuthority);
 
     if (strURI.startsWith("/api") && !strMethod.equals("OPTIONS") && !cafe24Config.getClientId().equals(strApiAuthority)) {
       HttpServletResponse httpServletResponse = (HttpServletResponse) response;

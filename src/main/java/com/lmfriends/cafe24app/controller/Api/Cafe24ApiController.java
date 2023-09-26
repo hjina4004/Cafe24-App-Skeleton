@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@CrossOrigin
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api")

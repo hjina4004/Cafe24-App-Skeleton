@@ -3,6 +3,8 @@
 * Spring Boot 3.1.4
 * Java 17
 * Thymeleaf
+* Spring Data JPA
+* Spring Security
 
 
 ## Cafe24 App 환경설정
