@@ -12,11 +12,17 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class HomeController {
 
-  final Cafe24Config cafe24Config;
+  private final Cafe24Config cafe24Config;
 
   @GetMapping("")
   public String home(Model model) {
     model.addAttribute("appName", cafe24Config.getAppName());
     return "index";
+  }
+
+  @GetMapping("admin")
+  public String admin(Model model) {
+    model.addAttribute("appName", cafe24Config.getAppName());
+    return "admin/index";
   }
 }

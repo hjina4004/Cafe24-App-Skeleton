@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.lmfriends.cafe24app.config.Cafe24Config;
 import com.lmfriends.cafe24app.dto.Cafe24ApiDto;
 import com.lmfriends.cafe24app.dto.Cafe24AppDto;
+import com.lmfriends.cafe24app.dto.ResponseDto;
 import com.lmfriends.cafe24app.model.Cafe24Token;
 import com.lmfriends.cafe24app.repository.Cafe24TokenRepository;
 
@@ -47,7 +48,7 @@ public class Cafe24Service {
         .add("redirect_uri", cafe24Config.getAppUri() + "/manager")
         .build();
 
-    ApiResponse<JSONObject> res = requestWithAuthorization(cafe24AppDto.getMall_id(), formBody);
+    ResponseDto<JSONObject> res = requestWithAuthorization(cafe24AppDto.getMall_id(), formBody);
     if (res.getCode() == 200)
       saveToken(res.getData());
     else
@@ -68,7 +69,7 @@ public class Cafe24Service {
     return "";
   }
 
-  public ApiResponse<JSONObject> customer(String mallId, Integer shopNo, String memberId) {
+  public ResponseDto<JSONObject> customer(String mallId, Integer shopNo, String memberId) {
     UriComponents uriComponents = UriComponentsBuilder.newInstance()
         .scheme("https")
         .host(mallId + ".cafe24api.com")
@@ -79,7 +80,7 @@ public class Cafe24Service {
     return requestWithAaccessToken("GET", mallId, shopNo, uriComponents.toString());
   }
 
-  public ApiResponse<JSONObject> orders(String mallId, Integer shopNo, Cafe24ApiDto dto) {
+  public ResponseDto<JSONObject> orders(String mallId, Integer shopNo, Cafe24ApiDto dto) {
     UriComponents uriComponents = UriComponentsBuilder.newInstance()
         .scheme("https")
         .host(mallId + ".cafe24api.com")
@@ -93,7 +94,7 @@ public class Cafe24Service {
     return requestWithAaccessToken("GET", mallId, shopNo, uriComponents.toString());
   }
 
-  public ApiResponse<JSONObject> order(String mallId, Integer shopNo, String orderId, Cafe24ApiDto dto) {
+  public ResponseDto<JSONObject> order(String mallId, Integer shopNo, String orderId, Cafe24ApiDto dto) {
     UriComponents uriComponents = UriComponentsBuilder.newInstance()
         .scheme("https")
         .host(mallId + ".cafe24api.com")
@@ -111,7 +112,7 @@ public class Cafe24Service {
         .add("refresh_token", refreshToken)
         .build();
 
-    ApiResponse<JSONObject> res = requestWithAuthorization(mallId, formBody);
+    ResponseDto<JSONObject> res = requestWithAuthorization(mallId, formBody);
     if (res.getCode() == 200)
       return saveToken(res.getData());
     else
@@ -139,7 +140,7 @@ public class Cafe24Service {
     return !dayNow.isBefore(dayeExpiresAt);
   }
 
-  protected ApiResponse<JSONObject> requestWithAuthorization(String mallId, RequestBody formBody) {
+  protected ResponseDto<JSONObject> requestWithAuthorization(String mallId, RequestBody formBody) {
     String preparedAuthorization = cafe24Config.getClientId() + ":" + cafe24Config.getClientSecret();
     String strAuthorization = "Basic " + Base64.getEncoder().encodeToString(preparedAuthorization.getBytes());
     Request request = new Request.Builder()
@@ -168,14 +169,14 @@ public class Cafe24Service {
       e.printStackTrace();
     }
 
-    return ApiResponse.res(resCode, resMessage, jsonObject);
+    return ResponseDto.res(resCode, resMessage, jsonObject);
   }
 
-  protected ApiResponse<JSONObject> requestWithAaccessToken(String method, String mallId, Integer shopNo, String url) {
+  protected ResponseDto<JSONObject> requestWithAaccessToken(String method, String mallId, Integer shopNo, String url) {
     log.info("Cafe24Service::requestWithAaccessToken shopNo={}, url={}", shopNo, url);
     String accessToken = getAccessToken(mallId, shopNo);
     if ("".equals(accessToken))
-      return ApiResponse.res(-404, "NOT accessToken");
+      return ResponseDto.res(-404, "NOT accessToken");
 
     Request request = new Request.Builder()
         .url(url)
@@ -203,7 +204,7 @@ public class Cafe24Service {
       e.printStackTrace();
     }
 
-    return ApiResponse.res(resCode, resMessage, jsonObject);
+    return ResponseDto.res(resCode, resMessage, jsonObject);
   }
 
   protected String saveToken(JSONObject jsonObject) {

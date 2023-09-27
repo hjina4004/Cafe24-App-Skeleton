@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lmfriends.cafe24app.dto.Cafe24ApiDto;
-import com.lmfriends.cafe24app.service.ApiResponse;
+import com.lmfriends.cafe24app.dto.ResponseDto;
 import com.lmfriends.cafe24app.service.Cafe24Service;
 
 import lombok.RequiredArgsConstructor;
@@ -22,10 +22,10 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("api")
 public class Cafe24ApiController {
 
-  protected final Cafe24Service cafe24Service;
+  private final Cafe24Service cafe24Service;
 
   @GetMapping("refresh-token/{mallId}/{shopNo}")
-  public ApiResponse<JSONObject> refreshToken(
+  public ResponseDto<JSONObject> refreshToken(
       @PathVariable(value = "mallId") String mallId,
       @PathVariable(value = "shopNo") Integer shopNo) {
     log.info("Cafe24ApiController::refreshToken {}, {}", mallId, shopNo);
@@ -38,12 +38,12 @@ public class Cafe24ApiController {
     JSONObject jsonObject = new JSONObject(map);
 
     return strToken.equals("")
-        ? ApiResponse.res(0, "fail", jsonObject)
-        : ApiResponse.res(1, "success", jsonObject);
+        ? ResponseDto.res(0, "fail", jsonObject)
+        : ResponseDto.res(1, "success", jsonObject);
   }
 
   @GetMapping("customers/{mallId}/{shopNo}/{memberId}")
-  public ApiResponse<JSONObject> customer(
+  public ResponseDto<JSONObject> customer(
       @PathVariable(value = "mallId") String mallId,
       @PathVariable(value = "shopNo") Integer shopNo,
       @PathVariable(value = "memberId") String memberId) {
@@ -51,7 +51,7 @@ public class Cafe24ApiController {
   }
 
   @GetMapping("orders/{mallId}/{shopNo}")
-  public ApiResponse<JSONObject> orders(
+  public ResponseDto<JSONObject> orders(
       @PathVariable(value = "mallId") String mallId,
       @PathVariable(value = "shopNo") Integer shopNo,
       Cafe24ApiDto dto) {
@@ -64,7 +64,7 @@ public class Cafe24ApiController {
   }
 
   @GetMapping("orders/{mallId}/{shopNo}/{orderId}")
-  public ApiResponse<JSONObject> order(
+  public ResponseDto<JSONObject> order(
       @PathVariable(value = "mallId") String mallId,
       @PathVariable(value = "shopNo") Integer shopNo,
       @PathVariable(value = "orderId") String orderId,

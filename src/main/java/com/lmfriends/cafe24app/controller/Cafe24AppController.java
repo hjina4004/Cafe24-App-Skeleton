@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("app")
 public class Cafe24AppController {
 
-  protected final Cafe24Service cafe24Service;
+  private final Cafe24Service cafe24Service;
 
   @GetMapping("")
   public String app(Cafe24AppDto dto, RedirectAttributes re, Model model) {

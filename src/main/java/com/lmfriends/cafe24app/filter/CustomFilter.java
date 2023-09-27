@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 public class CustomFilter extends GenericFilter {
 
-  protected Cafe24Config cafe24Config;
+  private Cafe24Config cafe24Config;
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

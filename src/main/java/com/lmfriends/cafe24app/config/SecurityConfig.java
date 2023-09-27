@@ -24,16 +24,19 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  protected final Cafe24Config cafe24Config;
+  private final Cafe24Config cafe24Config;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/", "/app/**").permitAll()
+            .requestMatchers("/", "/auth/**", "/app/**").permitAll()
             .requestMatchers("/api/**").permitAll()
             .anyRequest().authenticated())
-        .formLogin(withDefaults())
+        .formLogin(form -> form
+            .loginPage("/auth/login")
+            .loginProcessingUrl("/login")
+            .defaultSuccessUrl("/"))
         .cors(withDefaults())
         .addFilterAfter(new CustomFilter(cafe24Config), BasicAuthenticationFilter.class);
 

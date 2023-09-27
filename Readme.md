@@ -36,9 +36,9 @@ config/application.yml
 * 쇼핑몰 주문 목록
   ```
   /api/orders/{mallId}/{shopNo}?start_date=2021-06-01&end_date=2021-06-30&embed=items,receivers,buyer,return,cancellation,exchange
-  start_date default: 요청일 해당월 첫째일
-  end_date default: 요청일
   ```
+  > start_date default: 요청일 해당월 첫째일  
+  end_date default: 요청일  
 
 * 쇼핑몰 주문 조회
   ```
